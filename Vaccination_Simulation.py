@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
 from sklearn import linear_model
-
+from scipy.stats import expon
+from math import exp
+import matplotlib.pyplot as plt
 #Intial data set that will be used to train the model
 initial_set = { "rate": [12,9,18,7,17,8,23,20,6,14,38,2],
                 "personnel":[12,5,20,6,20,5,25,21,5,15,18,5],
@@ -33,4 +35,23 @@ print(d2.corr())
 mean_rate = d2["rate"].mean()
 lmbda = (1/mean_rate)
 print("The value of lambda: ",lmbda)
+
+
+
+## Function to
+def populate(p):
+    x = pd.DataFrame(columns =["day","cumulative_population_covered"])
+    i = 1
+    while((1-exp(-i*lmbda))<=0.999):
+        x.loc[i-1] = [i,p*(1-exp(-i*lmbda))]
+        i+=1
+    return x
+
+Delhi = populate(2000)
+Mumbai = populate(1500)
+
+plt.plot(Delhi["day"], Delhi["cumulative_population_covered"],'r')
+plt.plot(Mumbai["day"], Mumbai["cumulative_population_covered"],'b')
+plt.show()
+
 
